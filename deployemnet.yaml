@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: testapp-deployment
+  labels:
+    app: testapp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: testapp
+  template:
+    metadata:
+      labels:
+        app: testapp
+    spec:
+      containers:
+        - name: testapp
+          image: chandrumm/py-app:18
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+            
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: testapp-service
+spec:
+  selector:
+    app: testapp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+  type: LoadBalancer
